@@ -3,6 +3,7 @@ import Button from './button'
 import { ThemeContext } from "@/context/theme"
 import React, { useEffect, useState, useContext } from "react"
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
 import Dropdown from './dropdown'
 
@@ -15,10 +16,8 @@ export default function Navbar() {
     };
     const dropdownItems = [{
         text: 'About Streams',
-        href: '/about'
-    }, {
-        text: 'RSS',
-        href: '/rss'
+        href: '/about',
+        icon: QuestionMarkCircleIcon
     }];
 
     return (

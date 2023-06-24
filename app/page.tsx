@@ -61,7 +61,6 @@ export default function Home() {
                         })}>
                         {
                           hovering.streamIndex === streamIndex && hovering.contentIndex === contentIndex &&
-                          // true &&
                           <Popover text={content.title} />
                         }
                         <Image
