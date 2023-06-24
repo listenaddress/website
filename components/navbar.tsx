@@ -13,7 +13,13 @@ export default function Navbar() {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
-    const dropdownItems = ['About Streams', 'RSS'];
+    const dropdownItems = [{
+        text: 'About Streams',
+        href: '/about'
+    }, {
+        text: 'RSS',
+        href: '/rss'
+    }];
 
     return (
         <nav className={`flex items-center justify-between flex-wrap bg-white py-3 px-4 sm:px-6 lg:px-8 border-b-2 border-${theme}-border-primary`}>

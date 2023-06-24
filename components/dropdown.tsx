@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useContext } from 'react';
 import { ThemeContext } from "@/context/theme";
+import Link from 'next/link';
 
 interface DropdownProps {
     items: any[];
@@ -26,8 +27,8 @@ function Dropdown({ items }: DropdownProps) {
     return (
         <div className={`absolute top-5 z-10 mt-2 w-56 rounded-md bg-white border-${theme}-border-primary border-2`} ref={ref}>
             <div className="py-1 rounded-md bg-white shadow-xs">
-                {items.map((item: string, index: number) => (
-                    <a key={index} className={`block px-4 py-2 text-sm font-medium hover:bg-[#F2F2F6] cursor-pointer`}>{item}</a>
+                {items.map((item: any, index: number) => (
+                    <Link key={index} href={item.href} className={`block px-4 py-2 text-sm font-medium hover:bg-[#F2F2F6] cursor-pointer`}>{item.text}</Link>
                 ))}
             </div>
         </div>
