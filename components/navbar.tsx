@@ -58,9 +58,14 @@ export default function Navbar() {
         if (page) {
             setActivePage(page.page)
         }
-        const isAStream = pathname?.match(/^\/stream\/[^\/]+$/)
+
+        const isAStream = pathname?.match(/^\/stream\/([^\/]+)/)
         if (isAStream) {
-            setActivePage('stream')
+            if (pathname?.match(/^\/stream\/([^\/]+)\/about$/)) {
+                setActivePage('about-stream')
+            } else {
+                setActivePage('stream')
+            }
         }
     }, [pathname])
 
@@ -132,6 +137,28 @@ export default function Navbar() {
                                 </Link>
                                 <span className='px-2 text-gray-400'>/</span>
                             </div>
+                            <span className="tracking-tight cursor-pointer">
+                                About
+                            </span>
+                        </div>
+                    )}
+                    {activePage === 'about-stream' && (
+                        <div className="font-medium text-sm">
+                            {/* Only display the div below on medium screens and above */}
+                            <div className="hidden md:inline-block">
+                                <Link href="/">
+                                    <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
+                                        Streams
+                                    </span>
+                                </Link>
+                                <span className='px-2 text-gray-400'>/</span>
+                            </div>
+                            <Link href={`/stream/${stream}`}>
+                                <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
+                                    {slugToName[pathname?.split('/')[2] || 'Untitled']}
+                                </span>
+                            </Link>
+                            <span className='px-2 text-gray-400'>/</span>
                             <span className="tracking-tight cursor-pointer">
                                 About
                             </span>
