@@ -4,27 +4,42 @@ import Link from 'next/link';
 
 interface DropdownProps {
     items: any[];
+    left?: string;
+    top?: string;
+    setIsOpen: any;
 }
 
-function Dropdown({ items }: DropdownProps) {
+function Dropdown({
+    items,
+    left = '0',
+    top = '1.25',
+    setIsOpen
+}: DropdownProps) {
     const ref = useRef<HTMLDivElement>(null);
     const { theme, _ } = useContext(ThemeContext) as any;
 
-    const handleClickOutside = (event: MouseEvent) => {
-        if (ref.current && !ref.current.contains(event.target as Node)) {
-            // setIsOpen(false);
-        }
-    };
-
     useEffect(() => {
-        document.addEventListener('click', handleClickOutside, true);
-        return () => {
-            document.removeEventListener('click', handleClickOutside, true);
+        const closeOnAnyClick = (e: any) => {
+            if (ref.current && !ref.current.contains(e.target)) {
+                setIsOpen(false);
+            }
         };
-    }, []);
+        document.addEventListener('click', closeOnAnyClick);
+        return () => {
+            document.removeEventListener('click', closeOnAnyClick);
+        };
+    }, [setIsOpen]);
 
+    const classNames = `absolute z-10 mt-2 w-max rounded-md bg-white border-${theme}-border-primary border-2`
     return (
-        <div className={`absolute top-5 z-10 mt-2 w-max rounded-md bg-white border-${theme}-border-primary border-2`} ref={ref}>
+        <div
+            ref={ref}
+            className={classNames}
+            style={{
+                left: `${left}rem`,
+                top: `${top}rem`
+            }}
+        >
             <div className="py-1 rounded-md bg-white shadow-xs">
                 {items.map((item: any, index: number) => (
                     <Link key={index} href={item.href} className={`block px-4 pr-8 py-2 text-sm font-medium hover:bg-[#F2F2F6] cursor-pointer`}>

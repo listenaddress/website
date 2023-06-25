@@ -129,9 +129,6 @@ const platformImageMapping = {
 
 const parseContentForTable = (content: any[]) => {
     content.map((item) => {
-        console.log("Venue:")
-        console.log(item.venue)
-
         // if (platformImageMapping[item.venue.toLowerCase() as keyof typeof platformImageMapping]) {
         //     item.platformImage = platformImageMapping[item.venue.toLowerCase()];
         // }

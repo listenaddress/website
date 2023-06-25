@@ -97,7 +97,6 @@ export default function Stream({ params }: {
                 };
                 try {
                     result.summaryArray = parseToArray(result.summary);
-                    console.log(result.summaryArray);
                 } catch (e) {
                     console.error(e);
                 }
@@ -132,7 +131,7 @@ export default function Stream({ params }: {
                         <p className='mt-2 mb-4 text-gray-600'>
                             By {result.authors}
                         </p>
-                        <div className='my-4 bg-gray-300 rounded-xl'>
+                        <div className='my-4 bg-gray-200 rounded-xl'>
                             <div className='p-6 pb-7'>
                                 <div className='mb-2'>
                                     <SparklesIcon width={22} strokeWidth={2} className='inline-block relative bottom-[2px] mr-2' />
