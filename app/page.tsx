@@ -27,13 +27,13 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="max-w-md m-auto mt-12 text-black">
+    <main className="max-w-md m-auto mt-12 px-4 text-black">
       {
         streams.map((stream: any, streamIndex: number) => {
           return (
             <Link href={`/stream/${stream.slug}`} key={streamIndex}>
               <div
-                className="flex flex-col justify-center p-8 px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer"
+                className="flex flex-col justify-center p-6 px-[1.7rem] md:p-8 md:px-[2.3rem] border-2 rounded-xl border-[#EAEAEA] cursor-pointer"
                 key={streamIndex}>
                 <strong className="text-sm font-bold">
                   {stream.name}
