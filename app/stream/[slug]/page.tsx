@@ -173,7 +173,7 @@ export default function Stream({ params }: {
     }
 
     return (
-        <div className="max-w-[36rem] px-4 m-auto mt-12 mb-24 text-sm">
+        <div className="max-w-[36rem] px-4 m-auto mt-28 mb-24 text-sm">
             {stream.results && stream.results.map((result: any, index: number) => {
                 const labelString = platformToLabelString[result.venue]
                 const createdAt = moment(result.createdAt);
@@ -288,14 +288,16 @@ export default function Stream({ params }: {
                                 {platformToCTAString[result.venue]}
                             </Link>
                         </div>
-                        <div className='my-4 relative'>
+                        <div className='my-4 relative w-auto'>
                             <div
-                                className='text-blue-500 cursor-pointer'
-                                onMouseOver={() => setMoreOptionsHover(index)}
-                                onMouseLeave={() => setMoreOptionsHover(-1)}
+                                className='text-blue-500 cursor-default'
                             >
-                                <EllipsisHorizontalIcon width={18} strokeWidth={2} className='inline-block relative bottom-[2px] mr-2' />
-                                More options
+                                <span
+                                    onMouseOver={() => setMoreOptionsHover(index)}
+                                    onMouseLeave={() => setMoreOptionsHover(-1)}>
+                                    <EllipsisHorizontalIcon width={18} strokeWidth={2} className='inline-block relative bottom-[2px] mr-2' />
+                                    More options
+                                </span>
                             </div>
                             {moreOptionsHover === index && (
                                 <Popover
@@ -310,14 +312,14 @@ export default function Stream({ params }: {
                                 // @ts-ignore
                                 contentFeedback[result._id] && contentFeedback[result._id].type === 'like' ? (
                                     <div
-                                        className='border-2 border-gray-200 rounded-xl pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer'
+                                        className='border-2 border-gray-200 rounded-[8px] pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer'
                                         onClick={() => handleUnlikeClick(result._id)}
                                     >
                                         <HandThumbUpSolidIcon width={24} strokeWidth={2} className='inline-block relative bottom-[2px]' />
                                     </div>
                                 ) : (
                                     <div
-                                        className='border-2 border-gray-200 rounded-xl pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer'
+                                        className='border-2 border-gray-200 rounded-[8px] pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer'
                                         onClick={() => handleLikeClick(result._id)}
                                     >
                                         <HandThumbUpIcon width={24} strokeWidth={2} className='inline-block relative bottom-[2px]' />
@@ -328,14 +330,14 @@ export default function Stream({ params }: {
                                 // @ts-ignore
                                 contentFeedback[result._id] && contentFeedback[result._id].type === 'dislike' ? (
                                     <div
-                                        className='border-2 border-gray-200 rounded-xl pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer ml-4'
+                                        className='border-2 border-gray-200 rounded-[8px] pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer ml-4'
                                         onClick={() => handleUndislikeClick(result._id)}
                                     >
                                         <HandThumbDownSolidIcon width={24} strokeWidth={2} className='inline-block relative bottom-[2px]' />
                                     </div>
                                 ) : (
                                     <div
-                                        className='border-2 border-gray-200 rounded-xl pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer ml-4'
+                                        className='border-2 border-gray-200 rounded-[8px] pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer ml-4'
                                         onClick={() => handleDislikeClick(result._id)}
                                     >
                                         <HandThumbDownIcon width={24} strokeWidth={2} className='inline-block relative bottom-[2px]' />

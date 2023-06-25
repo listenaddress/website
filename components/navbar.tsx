@@ -77,61 +77,66 @@ export default function Navbar() {
     }
 
     return (
-        <nav className={`flex items-center justify-between flex-wrap bg-white py-3 px-4 sm:px-6 lg:px-8 border-b-2 border-${theme}-border-primary`}>
-            <div className="flex items-center flex-shrink-0 relative">
-                {activePage === 'home' && (
-                    <>
-                        <span onClick={toggleDropdown} className="font-medium text-sm tracking-tight cursor-pointer">
-                            Streams
-                            <ChevronDownIcon style={{
-                                width: "23px",
-                                display: "inline-block",
-                                marginLeft: "1px",
-                                position: "relative",
-                                bottom: "1px"
-                            }} />
-                        </span>
-                        {dropdownOpen && <Dropdown items={dropdownItems} setIsOpen={toggleDropdown} />}
-                    </>
-                )}
-                {activePage === 'stream' && (
-                    <div className="font-medium text-sm">
-                        {/* Only display the div below on medium screens and above */}
-                        <div className="hidden md:inline-block">
-                            <Link href="/">
-                                <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
-                                    Streams
+        <div className='fixed w-full top-0 z-10'>
+            <nav className={`flex items-center justify-between flex-wrap bg-white py-3 px-4 sm:px-6 lg:px-8 border-b-2 border-${theme}-border-primary`}>
+                <div className="flex items-center flex-shrink-0 relative">
+                    {activePage === 'home' && (
+                        <>
+                            <span onClick={toggleDropdown} className="font-medium text-sm tracking-tight cursor-pointer">
+                                Streams
+                                <ChevronDownIcon style={{
+                                    width: "23px",
+                                    display: "inline-block",
+                                    marginLeft: "1px",
+                                    position: "relative",
+                                    bottom: "1px"
+                                }} />
+                            </span>
+                            {dropdownOpen && <Dropdown items={dropdownItems} setIsOpen={toggleDropdown} />}
+                        </>
+                    )
+                    }
+                    {
+                        activePage === 'stream' && (
+                            <div className="font-medium text-sm">
+                                {/* Only display the div below on medium screens and above */}
+                                <div className="hidden md:inline-block">
+                                    <Link href="/">
+                                        <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
+                                            Streams
+                                        </span>
+                                    </Link>
+                                    <span className='px-2 text-gray-400'>/</span>
+                                </div>
+                                <span onClick={toggleDropdown} className="tracking-tight cursor-pointer">
+                                    {slugToName[pathname?.split('/')[2] || 'Untitled']}
+                                    <ChevronDownIcon style={{
+                                        width: "23px",
+                                        display: "inline-block",
+                                        marginLeft: "1px",
+                                        position: "relative",
+                                        bottom: "1px"
+                                    }} />
                                 </span>
-                            </Link>
-                            <span className='px-2 text-gray-400'>/</span>
-                        </div>
-                        <span onClick={toggleDropdown} className="tracking-tight cursor-pointer">
-                            {slugToName[pathname?.split('/')[2] || 'Untitled']}
-                            <ChevronDownIcon style={{
-                                width: "23px",
-                                display: "inline-block",
-                                marginLeft: "1px",
-                                position: "relative",
-                                bottom: "1px"
-                            }} />
-                        </span>
-                        {dropdownOpen && <Dropdown left={getDropdownLeft()} items={streamDropdownItems} setIsOpen={toggleDropdown} />}
+                                {dropdownOpen && <Dropdown left={getDropdownLeft()} items={streamDropdownItems} setIsOpen={toggleDropdown} />}
+                            </div>
+                        )
+                    }
+                </div >
+                <div className="flex flex-grow items-center w-auto">
+                    <div className="text-sm flex-grow">
                     </div>
-                )}
-            </div>
-            <div className="flex flex-grow items-center w-auto">
-                <div className="text-sm flex-grow">
+                    <div className="flex justify-end">
+                        <Button
+                            onClick={() => router.push('/sign-in')}
+                            size='sm'
+                            variant='blue'
+                        >
+                            Request Access
+                        </Button>
+                    </div>
                 </div>
-                <div className="flex justify-end">
-                    <Button
-                        onClick={() => router.push('/sign-in')}
-                        size='sm'
-                        variant='blue'
-                    >
-                        Request Access
-                    </Button>
-                </div>
-            </div>
-        </nav>
+            </nav >
+        </div >
     )
 }
