@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json(pinnedStreams);
 }
 
-// Close the Redis connection when the process terminates
+// TODO: Make this actually work
 process.on('SIGTERM', () => {
     redis.disconnect();
 });
