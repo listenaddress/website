@@ -38,7 +38,7 @@ export default function Navbar() {
 
     useEffect(() => {
         const urlToPage = [{
-            href: '',
+            href: '/',
             page: 'home'
         }, {
             href: '/about',
@@ -51,7 +51,10 @@ export default function Navbar() {
             page: 'about-stream'
         }];
 
-        const page = urlToPage.find((page) => pathname?.startsWith(page.href))
+        const page = urlToPage.find((page) => {
+            return pathname?.match(new RegExp(`^${page.href}$`))
+        })
+
         if (page) {
             setActivePage(page.page)
         }
@@ -94,34 +97,46 @@ export default function Navbar() {
                             </span>
                             {dropdownOpen && <Dropdown items={dropdownItems} setIsOpen={toggleDropdown} />}
                         </>
-                    )
-                    }
-                    {
-                        activePage === 'stream' && (
-                            <div className="font-medium text-sm">
-                                {/* Only display the div below on medium screens and above */}
-                                <div className="hidden md:inline-block">
-                                    <Link href="/">
-                                        <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
-                                            Streams
-                                        </span>
-                                    </Link>
-                                    <span className='px-2 text-gray-400'>/</span>
-                                </div>
-                                <span onClick={toggleDropdown} className="tracking-tight cursor-pointer">
-                                    {slugToName[pathname?.split('/')[2] || 'Untitled']}
-                                    <ChevronDownIcon style={{
-                                        width: "23px",
-                                        display: "inline-block",
-                                        marginLeft: "1px",
-                                        position: "relative",
-                                        bottom: "1px"
-                                    }} />
-                                </span>
-                                {dropdownOpen && <Dropdown left={getDropdownLeft()} items={streamDropdownItems} setIsOpen={toggleDropdown} />}
+                    )}
+                    {activePage === 'stream' && (
+                        <div className="font-medium text-sm">
+                            <div className="hidden md:inline-block">
+                                <Link href="/">
+                                    <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
+                                        Streams
+                                    </span>
+                                </Link>
+                                <span className='px-2 text-gray-400'>/</span>
                             </div>
-                        )
-                    }
+                            <span onClick={toggleDropdown} className="tracking-tight cursor-pointer">
+                                {slugToName[pathname?.split('/')[2] || 'Untitled']}
+                                <ChevronDownIcon style={{
+                                    width: "23px",
+                                    display: "inline-block",
+                                    marginLeft: "1px",
+                                    position: "relative",
+                                    bottom: "1px"
+                                }} />
+                            </span>
+                            {dropdownOpen && <Dropdown left={getDropdownLeft()} items={streamDropdownItems} setIsOpen={toggleDropdown} />}
+                        </div>
+                    )}
+                    {activePage === 'about' && (
+                        <div className="font-medium text-sm">
+                            {/* Only display the div below on medium screens and above */}
+                            <div className="hidden md:inline-block">
+                                <Link href="/">
+                                    <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
+                                        Streams
+                                    </span>
+                                </Link>
+                                <span className='px-2 text-gray-400'>/</span>
+                            </div>
+                            <span className="tracking-tight cursor-pointer">
+                                About
+                            </span>
+                        </div>
+                    )}
                 </div >
                 <div className="flex flex-grow items-center w-auto">
                     <div className="text-sm flex-grow">
