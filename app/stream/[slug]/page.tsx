@@ -1,12 +1,14 @@
 "use client";
 import { useState, useEffect, useContext } from 'react'
 import { parseContentForTable } from '@/lib/helpers';
-import { ArrowUpRightIcon, SparklesIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import { ArrowUpRightIcon, SparklesIcon, EllipsisHorizontalIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon as HandThumbUpSolidIcon, HandThumbDownIcon as HandThumbDownSolidIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image'
 import Link from 'next/link'
 import moment from 'moment'
 import { ThemeContext } from '@/context/theme';
 import Popover from '@/components/popover';
+import { HandThumbUpIcon } from '@heroicons/react/24/outline';
 
 export default function Stream({ params }: {
     params: { slug: string }
@@ -14,7 +16,7 @@ export default function Stream({ params }: {
     const [stream, setStream] = useState({ results: [] })
     const [summariesOpened, setSummariesOpened] = useState([])
     const [moreOptionsHover, setMoreOptionsHover] = useState(-1)
-    const { theme, _ } = useContext(ThemeContext) as any;
+    const [contentFeedback, setContentFeedback] = useState({})
 
     useEffect(() => {
         const fetchStream = async () => {
@@ -23,12 +25,139 @@ export default function Stream({ params }: {
             if (!streamRes.results && typeof streamRes.results !== 'object') {
                 return
             }
-            console.log(streamRes)
             streamRes.results = parseContentForTable(streamRes.results)
             setStream(streamRes)
         }
+        const fetchStreamActions = async () => {
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + params.slug + '/actions')
+            const streamActionsRes = await data.json()
+            if (!streamActionsRes.results && typeof streamActionsRes.results !== 'object') {
+                return
+            }
+            setSummariesOpened(streamActionsRes.results)
+        }
         fetchStream()
+        fetchStreamActions()
     }, [params.slug])
+
+    type Feedback = {
+        type: string;
+    }
+
+    type ContentFeedback = {
+        [key: string]: Feedback;
+    }
+
+    const handleLikeClick = async (contentId: string) => {
+        try {
+            let optimisticNewContentFeedback: ContentFeedback = { ...contentFeedback }
+            if (optimisticNewContentFeedback[contentId] && optimisticNewContentFeedback[contentId].type === 'dislike') {
+                await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + params.slug + '/actions', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contentId
+                    })
+                })
+            }
+
+            optimisticNewContentFeedback[contentId] = { type: 'like' }
+            setContentFeedback(optimisticNewContentFeedback)
+
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + params.slug + '/actions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contentId,
+                    type: 'like'
+                })
+            })
+            await data.json()
+
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const handleDislikeClick = async (contentId: string) => {
+        try {
+            let optimisticNewContentFeedback: ContentFeedback = { ...contentFeedback }
+            if (optimisticNewContentFeedback[contentId] && optimisticNewContentFeedback[contentId].type === 'like') {
+                await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + params.slug + '/actions', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contentId
+                    })
+                })
+            }
+
+            optimisticNewContentFeedback[contentId] = { type: 'dislike' }
+            setContentFeedback(optimisticNewContentFeedback)
+
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + params.slug + '/actions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contentId,
+                    type: 'dislike'
+                })
+            })
+            await data.json()
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const handleUnlikeClick = async (contentId: string) => {
+        try {
+            let optimisticNewContentFeedback: ContentFeedback = { ...contentFeedback }
+            delete optimisticNewContentFeedback[contentId]
+            setContentFeedback(optimisticNewContentFeedback)
+
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + params.slug + '/actions', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contentId
+                })
+            })
+            await data.json()
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const handleUndislikeClick = async (contentId: string) => {
+        try {
+            let optimisticNewContentFeedback: ContentFeedback = { ...contentFeedback }
+            delete optimisticNewContentFeedback[contentId]
+            setContentFeedback(optimisticNewContentFeedback)
+
+            const data = await fetch(process.env.NEXT_PUBLIC_API_URL + 'streams/' + params.slug + '/actions', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contentId
+                })
+            })
+            await data.json()
+        } catch (e) {
+            console.error(e)
+        }
+    }
 
     type PlatformToString = {
         [key: string]: string;
@@ -94,7 +223,8 @@ export default function Stream({ params }: {
                     }
 
                     return result;
-                };
+                }
+
                 try {
                     result.summaryArray = parseToArray(result.summary);
                 } catch (e) {
@@ -175,9 +305,49 @@ export default function Stream({ params }: {
                                 />
                             )}
                         </div>
-                        {index !== stream.results.length - 1 && (
-                            <div className={`h-[2px] bg-gray-100 my-8`}></div>
-                        )}
+                        <div className='my-4'>
+                            {
+                                // @ts-ignore
+                                contentFeedback[result._id] && contentFeedback[result._id].type === 'like' ? (
+                                    <div
+                                        className='border-2 border-gray-200 rounded-xl pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer'
+                                        onClick={() => handleUnlikeClick(result._id)}
+                                    >
+                                        <HandThumbUpSolidIcon width={24} strokeWidth={2} className='inline-block relative bottom-[2px]' />
+                                    </div>
+                                ) : (
+                                    <div
+                                        className='border-2 border-gray-200 rounded-xl pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer'
+                                        onClick={() => handleLikeClick(result._id)}
+                                    >
+                                        <HandThumbUpIcon width={24} strokeWidth={2} className='inline-block relative bottom-[2px]' />
+                                    </div>
+                                )
+                            }
+                            {
+                                // @ts-ignore
+                                contentFeedback[result._id] && contentFeedback[result._id].type === 'dislike' ? (
+                                    <div
+                                        className='border-2 border-gray-200 rounded-xl pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer ml-4'
+                                        onClick={() => handleUndislikeClick(result._id)}
+                                    >
+                                        <HandThumbDownSolidIcon width={24} strokeWidth={2} className='inline-block relative bottom-[2px]' />
+                                    </div>
+                                ) : (
+                                    <div
+                                        className='border-2 border-gray-200 rounded-xl pr-3 pl-[.74rem] pt-[.845rem] pb-[.645rem] inline-block cursor-pointer ml-4'
+                                        onClick={() => handleDislikeClick(result._id)}
+                                    >
+                                        <HandThumbDownIcon width={24} strokeWidth={2} className='inline-block relative bottom-[2px]' />
+                                    </div>
+                                )
+                            }
+                        </div>
+                        {
+                            index !== stream.results.length - 1 && (
+                                <div className={`h-[2px] bg-gray-100 my-8`}></div>
+                            )
+                        }
                     </div>
                 )
             })}

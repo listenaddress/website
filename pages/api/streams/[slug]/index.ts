@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { handleErrors } from '../../../lib/errors';
-
+import { handleErrors } from '../../../../lib/errors';
 import Redis from "ioredis";
 
 const redis = new Redis({
