@@ -52,6 +52,9 @@ export default function Navbar() {
         }, {
             href: '/request-access',
             page: 'request-access'
+        }, {
+            href: '/stream/[slug]/subscribe',
+            page: 'subscribe-to-stream'
         }];
 
         const page = urlToPage.find((page) => {
@@ -66,6 +69,8 @@ export default function Navbar() {
         if (isAStream) {
             if (pathname?.match(/^\/stream\/([^\/]+)\/about$/)) {
                 setActivePage('about-stream')
+            } else if (pathname?.match(/^\/stream\/([^\/]+)\/subscribe$/)) {
+                setActivePage('subscribe-to-stream')
             } else {
                 setActivePage('stream')
             }
@@ -183,19 +188,43 @@ export default function Navbar() {
                             </span>
                         </div>
                     )}
+                    {activePage === 'subscribe-to-stream' && (
+                        <div className="font-medium text-sm">
+                            <div className="hidden md:inline-block">
+                                <Link href="/">
+                                    <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
+                                        Streams
+                                    </span>
+                                </Link>
+                                <span className='px-2 text-gray-400'>/</span>
+                            </div>
+                            <span className="tracking-tight cursor-pointer">
+                                Subscribe
+                            </span>
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex flex-grow items-center w-auto min-h-[34px]">
                     <div className="text-sm flex-grow">
                     </div>
                     <div className="flex justify-end">
-                        {activePage !== 'request-access' && (
+                        {activePage === 'home' && (
                             <Button
                                 onClick={() => router.push('/request-access')}
                                 size='sm'
                                 variant='blue'
                             >
                                 Request access
+                            </Button>
+                        )}
+                        {activePage === 'stream' && (
+                            <Button
+                                onClick={() => router.push(`/stream/${stream}/subscribe`)}
+                                size='sm'
+                                variant='blue'
+                            >
+                                Subscribe
                             </Button>
                         )}
                     </div>

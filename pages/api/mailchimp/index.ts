@@ -6,15 +6,23 @@ client.setConfig({
 });
 
 export default async function handler(req: any, res: any) {
-    const { email } = req.body;
+    const { email, stream } = req.body;
     console.log('Request for access from:', email)
+    if (stream) {
+        console.log('They are requesting access to:', stream)
+    }
+
+    let objectToSave: any = {
+        email_address: email,
+        status: "subscribed",
+    }
+
+    if (stream) {
+        objectToSave['tags'] = [stream]
+    }
 
     try {
-        await client.lists.addListMember(process.env.MAILCHIMP_LIST_ID, {
-            email_address: email,
-            status: "subscribed",
-        });
-
+        await client.lists.addListMember(process.env.MAILCHIMP_LIST_ID, objectToSave);
         res.status(201).json({ message: "Success" });
     } catch (error: any) {
         console.log("Error for email:", email)
