@@ -198,6 +198,12 @@ export default function Navbar() {
                                 </Link>
                                 <span className='px-2 text-gray-400'>/</span>
                             </div>
+                            <Link href={`/stream/${stream}`}>
+                                <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
+                                    {slugToName[pathname?.split('/')[2] || 'Untitled']}
+                                </span>
+                            </Link>
+                            <span className='px-2 text-gray-400'>/</span>
                             <span className="tracking-tight cursor-pointer">
                                 Subscribe
                             </span>
@@ -218,7 +224,7 @@ export default function Navbar() {
                                 Request access
                             </Button>
                         )}
-                        {activePage === 'stream' && (
+                        {(activePage === 'stream' || activePage === 'about-stream') && (
                             <Button
                                 onClick={() => router.push(`/stream/${stream}/subscribe`)}
                                 size='sm'

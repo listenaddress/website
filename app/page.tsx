@@ -27,7 +27,7 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="max-w-md m-auto mt-28 px-4 text-black">
+    <main className="max-w-lg m-auto mt-28 px-4 text-black">
       {
         streams.map((stream: any, streamIndex: number) => {
           return (
