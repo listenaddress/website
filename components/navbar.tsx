@@ -49,6 +49,9 @@ export default function Navbar() {
         }, {
             href: '/stream/[slug]/about',
             page: 'about-stream'
+        }, {
+            href: '/request-access',
+            page: 'request-access'
         }];
 
         const page = urlToPage.find((page) => {
@@ -164,18 +167,37 @@ export default function Navbar() {
                             </span>
                         </div>
                     )}
-                </div >
-                <div className="flex flex-grow items-center w-auto">
+                    {activePage === 'request-access' && (
+                        <div className="font-medium text-sm">
+                            {/* Only display the div below on medium screens and above */}
+                            <div className="hidden md:inline-block">
+                                <Link href="/">
+                                    <span className="font-medium text-sm tracking-tight cursor-pointer text-gray-600">
+                                        Streams
+                                    </span>
+                                </Link>
+                                <span className='px-2 text-gray-400'>/</span>
+                            </div>
+                            <span className="tracking-tight cursor-pointer">
+                                Request access
+                            </span>
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex flex-grow items-center w-auto min-h-[34px]">
                     <div className="text-sm flex-grow">
                     </div>
                     <div className="flex justify-end">
-                        <Button
-                            onClick={() => router.push('/sign-in')}
-                            size='sm'
-                            variant='blue'
-                        >
-                            Request Access
-                        </Button>
+                        {activePage !== 'request-access' && (
+                            <Button
+                                onClick={() => router.push('/request-access')}
+                                size='sm'
+                                variant='blue'
+                            >
+                                Request access
+                            </Button>
+                        )}
                     </div>
                 </div>
             </nav >
